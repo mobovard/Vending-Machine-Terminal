@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Capstone.Interfaces;
+
+namespace Capstone.Classes
+{
+    class Candy : Food, IDispensingMessage
+    {
+        public Candy(string name, decimal price) : base(name, price)
+        {
+
+        }
+
+        public void DispenseMessage()
+        {
+            //TODO add in functionality to display money remaining
+            Console.WriteLine($"Munch Munch, Yum! {Name}, {Price}");
+        }
+    }
+}
