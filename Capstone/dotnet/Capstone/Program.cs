@@ -8,13 +8,13 @@ namespace Capstone
     class Program
     {
         static void Main(string[] args)
-        {         
+        {
             string userInput = "";
 
             while (userInput != "3")
             {
                 //use filePath to create a dictionary<slot, Food>
-                string filePath = @"C:\Users\Student\workspace\TestCapstone\dont_push-module1-capstone-c-team-4\Capstone\dotnet\Capstone\Files\Inventory.txt";
+                string filePath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\Example Files\Inventory.txt";
 
                 Dictionary<string, Food> foodDictionary = VendingMachine.Stock(filePath);
 
