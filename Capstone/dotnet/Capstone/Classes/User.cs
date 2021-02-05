@@ -6,6 +6,6 @@ namespace Capstone.Classes
 {
     public class User
     {
-        public double Balance { get; set; } = 0;
+        public decimal Balance { get; set; } = 0;
     }
 }

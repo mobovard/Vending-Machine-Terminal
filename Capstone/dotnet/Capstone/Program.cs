@@ -8,159 +8,186 @@ namespace Capstone
     class Program
     {
         static void Main(string[] args)
-        {
-            //use filePath to create a dictionary<slot, Food>
-            string filePath = @"C:\Users\Student\workspace\TestCapstone\dont_push-module1-capstone-c-team-4\Capstone\dotnet\Capstone\Files\Inventory.txt";
-            Dictionary<string, Food> foodDictionary = VendingMachine.Stock(filePath);
+        {         
+            string userInput = "";
 
-            //instantiate a user that has a Balance property
-            User currentUser = new User();
-
-            //promt the user
-            prompt: VendingMachine.DisplayPromptToUser();
-
-            //capture users response
-            string userInput = Console.ReadLine();
-            Console.WriteLine();
-
-
-
-            switch (userInput)
+            while (userInput != "3")
             {
-                case "1":
-                    {
-                        //Display vending machine items
-                        VendingMachine.DisplayItems(foodDictionary);
-                        Console.WriteLine();
-                        //Allow user to exit and return to main prompt
-                        //TODO maybe refactor with a while loop and call VendingMachine.DisplayPromptToUser()
-                        pressE: Console.Write("Press e to exit: ");
-                        var exit = Console.ReadLine();
+                //use filePath to create a dictionary<slot, Food>
+                string filePath = @"C:\Users\Student\workspace\TestCapstone\dont_push-module1-capstone-c-team-4\Capstone\dotnet\Capstone\Files\Inventory.txt";
 
-                        if (exit == "e")
+                Dictionary<string, Food> foodDictionary = VendingMachine.Stock(filePath);
+
+                //instantiate a user that has a Balance property
+                User currentUser = new User();
+
+                //promt the user
+                VendingMachine.DisplayPromptToUser();
+
+                //capture users response
+                userInput = Console.ReadLine();
+                Console.WriteLine();
+                Console.Clear();
+
+                switch (userInput)
+                {
+                    case "1":
                         {
-                            Console.Clear();
-                            goto prompt;
-                        }
-                        else
-                        {
-                            goto pressE;
-                        }
-
-                    }
-
-                case "2":
-                    {
-                        //PURCHASE SCREEN
-                        Console.WriteLine("(1) Feed Money");
-                        Console.WriteLine("(2) Select Product");
-                        Console.WriteLine("(3) Finish Transaction");
-                        Console.WriteLine($"Current Money Provided: {currentUser.Balance}\n");
-
-                        string twoInput = Console.ReadLine();
-                        Console.WriteLine();
-
-                        //FEED MONEY
-                        if (twoInput == "1")
-                        {
-                            //user can add money to their balance
-                            Console.Write("Please add a whole dollar amount to your balance: ");
-                            double currentBalance = currentUser.Balance += Convert.ToDouble(Console.ReadLine());
-                            Console.WriteLine($"Your current balance is now: {currentBalance}\n");
-
-                            //Allow user to exit and return to purchase prompt
-                            pressE: Console.Write("Press e to exit: ");
-                            var exit = Console.ReadLine();
-
-                            if (exit == "e")
+                            while (userInput != "e")
                             {
+                                //Display vending machine items
+                                VendingMachine.DisplayItems(foodDictionary);
+                                Console.WriteLine();
+
+                                //Allow user to exit and return to main prompt
+                                Console.Write("Press e to exit: ");
+                                userInput = Console.ReadLine();
+
                                 Console.Clear();
-                                goto case "2";
-                            }
-                            else
-                            {
-                                goto pressE;
                             }
 
+                            break;
                         }
-                        //SELECT PRODUCT
-                        else if (twoInput == "2")
+
+                    case "2":
                         {
-                            //Display items to user
-                            Console.Clear();
-                            VendingMachine.DisplayItems(foodDictionary);
-                            Console.WriteLine();
-
-                            //prompt user to select an item
-                            Console.Write("Please enter the slot code of the item you want: ");
-                            string userSelection = Console.ReadLine();
-
-                            //check that the user selection is in the vending machine
-                            if (foodDictionary.ContainsKey(userSelection))
+                            while (userInput != "3")
                             {
-                                //loop through foodDictionary 
-                                foreach (KeyValuePair<string, Food> item in foodDictionary)
+                                //PURCHASE SCREEN
+                                Console.WriteLine("(1) Feed Money");
+                                Console.WriteLine("(2) Select Product");
+                                Console.WriteLine("(3) Finish Transaction");
+                                Console.WriteLine($"Current Money Provided: ${currentUser.Balance}\n");
+
+                                string purchaseScreenInput = Console.ReadLine();
+                                Console.WriteLine();
+
+                                //FEED MONEY
+                                if (purchaseScreenInput == "1")
                                 {
-                                    string slot = item.Key;
-                                    Food food = item.Value;
+                                    Console.Clear();
 
-                                    //if the user picks a valid option... 
-                                    if (userSelection == slot)
+                                    //user can add money to their balance
+                                    Console.Write("Please add a whole dollar amount to your balance: ");
+                                    decimal currentBalance = currentUser.Balance += Convert.ToDecimal(Console.ReadLine());
+
+                                    //Allow user to exit and return to purchase prompt
+                                    Console.Clear();
+                                }
+
+                                //SELECT PRODUCT
+                                while (purchaseScreenInput == "2")
+                                {
+                                    Console.Clear();
+
+                                    //Display items to user
+                                    VendingMachine.DisplayItems(foodDictionary);
+                                    Console.WriteLine();
+
+                                    //prompt user to select an item
+                                    Console.Write("Please enter the slot code of the item you want: ");
+                                    string userSelection = Console.ReadLine();
+
+                                    //check that the user selection is in the vending machine
+                                    if (foodDictionary.ContainsKey(userSelection))
                                     {
-                                        //check inventory
-                                        if (food.Quantity == 0)
+                                        //loop through foodDictionary 
+                                        foreach (KeyValuePair<string, Food> item in foodDictionary)
                                         {
-                                            Console.Clear();
-                                            Console.WriteLine("Sorry, item is sold out...");
-                                            goto case "2";
-                                        }
-                                        //check the user's balance, make sure they have enough money
-                                        else if (currentUser.Balance < Convert.ToDouble(food.Price))
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine("Sorry, insufficient funds...\n");
-                                            goto case "2";
-                                        }
-                                        //if there's inventory and the user has enough money,
-                                        //subtract the cost from their balance
-                                        //decrement the inventory
-                                        //and dispense the item 
-                                        else
-                                        {
-                                            currentUser.Balance -= Convert.ToDouble(food.Price);
-                                            food.Quantity--;
+                                            string slot = item.Key;
+                                            Food food = item.Value;
 
-                                            Console.Clear();
-                                            Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
-                                            goto prompt;
+                                            //if the user picks a valid option... 
+                                            if (userSelection == slot)
+                                            {
+                                                //check inventory
+                                                if (food.Quantity == 0)
+                                                {
+                                                    Console.Clear();
+                                                    Console.WriteLine("Sorry, item is sold out...");
+                                                    break;
+                                                }
+                                                //check the user's balance, make sure they have enough money
+                                                else if (currentUser.Balance < food.Price)
+                                                {
+                                                    Console.Clear();
+                                                    Console.WriteLine("Sorry, insufficient funds...\n");
+                                                    break;
+                                                }
+                                                //if there's inventory and the user has enough money,
+                                                //subtract the cost from their balance
+                                                //decrement the inventory
+                                                //and dispense the item 
+                                                else
+                                                {
+                                                    currentUser.Balance -= food.Price;
+                                                    food.Quantity--;
+
+                                                    Console.Clear();
+                                                    Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
+
+
+                                                }
+
+                                            }
 
                                         }
-
+                                    }
+                                    else
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("Sorry, item not found...\n");
+                                        break;
                                     }
 
+                                    break;
+                                }
+                                //FINISH TRANSACTION
+                                while (purchaseScreenInput == "3")
+                                {
+                                    decimal balance = currentUser.Balance;
+                                    string balanceString = balance.ToString("0.00");
+                                    balance = Convert.ToDecimal(balanceString);
+
+                                    //Make balance a whole number
+                                    balance *= 100;
+
+                                    double numberOfQuarters = 0;
+                                    double numberOfDimes = 0;
+                                    double numberOfNickels = 0;
+
+                                    while (balance > 25)
+                                    {
+                                        balance -= 25;
+                                        numberOfQuarters++;
+                                    }
+
+                                    while (balance > 10)
+                                    {
+                                        balance -= 10;
+                                        numberOfDimes++;
+                                    }
+
+                                    while (balance > 0)
+                                    {
+                                        balance -= 5;
+                                        numberOfNickels++;
+                                    }
+
+                                    Console.Clear();
+                                    currentUser.Balance = balance;
+
+                                    Console.WriteLine($"Here's your change: {numberOfQuarters} Quarter(s), {numberOfDimes} Dime(s), and {numberOfNickels} Nickel(s)");
+
+                                    userInput = "3";
+                                    break;
                                 }
                             }
-                            else
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Sorry, item not found...\n");
-                                goto case "2";
-                            }
-
+                            break;
                         }
-                        //FINISH TRANSACTION
-                        else if (twoInput == "3")
-                        {
-
-                        }
-
-                        break;
-                    }
-
-
-
-
+                }
             }
         }
     }
 }
+
