@@ -61,6 +61,8 @@ namespace Capstone
             return dictionary;
         }
 
+
+
         //Display the initial prompt to the user
         public static void DisplayPromptToUser()
         {
@@ -68,6 +70,8 @@ namespace Capstone
             Console.WriteLine("(2) Purchase");
             Console.WriteLine("(3) Exit\n");
         }
+
+
 
         //Display each item to the user in the format SLOT, NAME, PRICE, QUANTITY
         public static void DisplayItems(Dictionary<string, Food> dictionary)
@@ -92,5 +96,80 @@ namespace Capstone
 
 
 
+        //loop through foodDictionary - make sure they're able to purchase the item
+        public static void ValidateUserInput(Dictionary<string, Food> foodDictionary, User currentUser, string userSelection)
+        { 
+            foreach (KeyValuePair<string, Food> item in foodDictionary)
+            {
+                string slot = item.Key;
+                Food food = item.Value;
+
+                //if the user picks a valid option... 
+                if (userSelection == slot)
+                {
+                    //check inventory
+                    if (food.Quantity == 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Sorry, item is sold out...");
+                        break;
+                    }
+                    //check the user's balance, make sure they have enough money
+                    else if (currentUser.Balance < food.Price)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Sorry, insufficient funds...\n");
+                        break;
+                    }
+                    //if there's inventory and the user has enough money,
+                    //subtract the cost from their balance
+                    //decrement the inventory
+                    //and dispense the item 
+                    else
+                    {
+                        currentUser.Balance -= food.Price;
+                        food.Quantity--;
+
+                        Console.Clear();
+                        Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
+
+
+                    }
+
+                }
+
+            }
+        }
+
+
+
+        //Feed money to the user's balance
+        public static void FeedMoney(User currentUser, string purchaseScreenInput)
+        {
+            //FEED MONEY
+            if (purchaseScreenInput == "1")
+            {
+                Console.Clear();
+
+                //user can add money to their balance
+                Console.Write("Please add a whole dollar amount to your balance: ");
+                decimal currentBalance = currentUser.Balance += Convert.ToDecimal(Console.ReadLine());
+
+                //Allow user to exit and return to purchase prompt
+                Console.Clear();
+            }
+        }
+
+
+
+        //Format currentUser.balance to only have 2 decimal places
+        public static decimal FormatBalance(User currentUser)
+        {
+            //Get the balance and format it
+            decimal balance = currentUser.Balance;
+            string balanceString = balance.ToString("0.00");
+            balance = Convert.ToDecimal(balanceString);
+            return balance;
+        }
     }
 }

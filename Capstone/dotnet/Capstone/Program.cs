@@ -62,18 +62,8 @@ namespace Capstone
                                 string purchaseScreenInput = Console.ReadLine();
                                 Console.WriteLine();
 
-                                //FEED MONEY
-                                if (purchaseScreenInput == "1")
-                                {
-                                    Console.Clear();
-
-                                    //user can add money to their balance
-                                    Console.Write("Please add a whole dollar amount to your balance: ");
-                                    decimal currentBalance = currentUser.Balance += Convert.ToDecimal(Console.ReadLine());
-
-                                    //Allow user to exit and return to purchase prompt
-                                    Console.Clear();
-                                }
+                                //allow user to FEED MONEY to their balance
+                                VendingMachine.FeedMoney(currentUser, purchaseScreenInput);
 
                                 //SELECT PRODUCT
                                 while (purchaseScreenInput == "2")
@@ -90,48 +80,9 @@ namespace Capstone
 
                                     //check that the user selection is in the vending machine
                                     if (foodDictionary.ContainsKey(userSelection))
-                                    {
-                                        //loop through foodDictionary 
-                                        foreach (KeyValuePair<string, Food> item in foodDictionary)
-                                        {
-                                            string slot = item.Key;
-                                            Food food = item.Value;
-
-                                            //if the user picks a valid option... 
-                                            if (userSelection == slot)
-                                            {
-                                                //check inventory
-                                                if (food.Quantity == 0)
-                                                {
-                                                    Console.Clear();
-                                                    Console.WriteLine("Sorry, item is sold out...");
-                                                    break;
-                                                }
-                                                //check the user's balance, make sure they have enough money
-                                                else if (currentUser.Balance < food.Price)
-                                                {
-                                                    Console.Clear();
-                                                    Console.WriteLine("Sorry, insufficient funds...\n");
-                                                    break;
-                                                }
-                                                //if there's inventory and the user has enough money,
-                                                //subtract the cost from their balance
-                                                //decrement the inventory
-                                                //and dispense the item 
-                                                else
-                                                {
-                                                    currentUser.Balance -= food.Price;
-                                                    food.Quantity--;
-
-                                                    Console.Clear();
-                                                    Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
-
-
-                                                }
-
-                                            }
-
-                                        }
+                                    {                          
+                                        //make sure the user is able to purchase an item
+                                        VendingMachine.ValidateUserInput(foodDictionary, currentUser, userSelection);
                                     }
                                     else
                                     {
@@ -145,9 +96,8 @@ namespace Capstone
                                 //FINISH TRANSACTION
                                 while (purchaseScreenInput == "3")
                                 {
-                                    decimal balance = currentUser.Balance;
-                                    string balanceString = balance.ToString("0.00");
-                                    balance = Convert.ToDecimal(balanceString);
+                                    //Format balance to only have 2 decimal places
+                                    decimal balance = VendingMachine.FormatBalance(currentUser);
 
                                     //Make balance a whole number
                                     balance *= 100;
@@ -179,7 +129,6 @@ namespace Capstone
 
                                     Console.WriteLine($"Here's your change: {numberOfQuarters} Quarter(s), {numberOfDimes} Dime(s), and {numberOfNickels} Nickel(s)");
 
-                                    userInput = "3";
                                     break;
                                 }
                             }
