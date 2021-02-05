@@ -17,6 +17,8 @@ namespace Capstone.Classes
             this.Quantity = 5;
         }
 
+        public abstract string DispenseMessage();
+
 
     }
 }

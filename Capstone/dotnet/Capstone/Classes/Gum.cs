@@ -5,17 +5,17 @@ using Capstone.Interfaces;
 
 namespace Capstone.Classes
 {
-    class Gum : Food, IDispensingMessage
+    class Gum : Food
     {
         public Gum(string name, decimal price) : base(name, price)
         {
 
         }
 
-        public void DispenseMessage()
+        public override string DispenseMessage()
         {
             //TODO add in functionality to display money remaining
-            Console.WriteLine($"Chew Chew, Yum! {Name}, {Price}");
+            return $"Chew Chew, Yum! {this.Name}, {this.Price}.";
         }
     }
 }
