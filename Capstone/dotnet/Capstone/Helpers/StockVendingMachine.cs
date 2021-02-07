@@ -97,7 +97,7 @@ namespace Capstone
 
 
         //loop through foodDictionary - make sure they're able to purchase the item
-        public static void ValidateUserInput(Dictionary<string, Food> foodDictionary, User currentUser, string userSelection)
+        public static void ValidateUserInput(Dictionary<string, Food> foodDictionary, User currentUser, string userSelection, Log log)
         { 
             foreach (KeyValuePair<string, Food> item in foodDictionary)
             {
@@ -127,12 +127,18 @@ namespace Capstone
                     //and dispense the item 
                     else
                     {
+                        decimal beforeBalance = currentUser.Balance;
                         currentUser.Balance -= food.Price;
                         food.Quantity--;
 
                         Console.Clear();
                         Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
 
+                        string date = $"{DateTime.Now:yyyy-MM-dd}";
+                        string time = $"{DateTime.Now:HH:mm:ss}";
+                        string amOrPm = $"{DateTime.Now:tt}";
+                        string logMessage = $"{date} {time} {amOrPm} {food.Name.ToUpper()} {userSelection} ${beforeBalance.ToString("0.00")} ${currentUser.Balance.ToString("0.00")}";
+                        log.WriteMessage(logMessage);
 
                     }
 
@@ -144,7 +150,7 @@ namespace Capstone
 
 
         //Feed money to the user's balance
-        public static void FeedMoney(User currentUser, string purchaseScreenInput)
+        public static void FeedMoney(User currentUser, string purchaseScreenInput, Log log)
         {
             //FEED MONEY
             if (purchaseScreenInput == "1")
@@ -153,7 +159,15 @@ namespace Capstone
 
                 //user can add money to their balance
                 Console.Write("Please add a whole dollar amount to your balance: ");
-                decimal currentBalance = currentUser.Balance += Convert.ToDecimal(Console.ReadLine());
+                decimal userInput = Convert.ToDecimal(Console.ReadLine());
+                decimal currentBalance = currentUser.Balance += (userInput);
+
+                //generate log message
+                string date = $"{DateTime.Now:yyyy-MM-dd}";
+                string time = $"{DateTime.Now:HH:mm:ss}";
+                string amOrPm = $"{DateTime.Now:tt}";
+                string logMessage = $"{date} {time} {amOrPm} FEED MONEY: ${userInput.ToString("0.00")} ${currentBalance.ToString("0.00")}";
+                log.WriteMessage(logMessage);
 
                 //Allow user to exit and return to purchase prompt
                 Console.Clear();

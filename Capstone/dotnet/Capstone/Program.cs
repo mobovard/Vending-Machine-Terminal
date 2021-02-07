@@ -21,7 +21,13 @@ namespace Capstone
                 //instantiate a user that has a Balance property
                 User currentUser = new User();
 
-                //promt the user
+                //use logpath to create a new log class
+                string logPath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\Example Files\Log2.txt";
+
+                //construct log class
+                Log log = new Log(logPath);
+
+                //prompt the user
                 VendingMachine.DisplayPromptToUser();
 
                 //capture users response
@@ -51,6 +57,7 @@ namespace Capstone
 
                     case "2":
                         {
+                            string purchaseScreenInput = "";
                             while (userInput != "3")
                             {
                                 //PURCHASE SCREEN
@@ -59,11 +66,11 @@ namespace Capstone
                                 Console.WriteLine("(3) Finish Transaction");
                                 Console.WriteLine($"Current Money Provided: ${currentUser.Balance}\n");
 
-                                string purchaseScreenInput = Console.ReadLine();
+                                purchaseScreenInput = Console.ReadLine();
                                 Console.WriteLine();
 
                                 //allow user to FEED MONEY to their balance
-                                VendingMachine.FeedMoney(currentUser, purchaseScreenInput);
+                                VendingMachine.FeedMoney(currentUser, purchaseScreenInput, log);
 
                                 //SELECT PRODUCT
                                 while (purchaseScreenInput == "2")
@@ -82,7 +89,7 @@ namespace Capstone
                                     if (foodDictionary.ContainsKey(userSelection))
                                     {                          
                                         //make sure the user is able to purchase an item
-                                        VendingMachine.ValidateUserInput(foodDictionary, currentUser, userSelection);
+                                        VendingMachine.ValidateUserInput(foodDictionary, currentUser, userSelection, log);
                                     }
                                     else
                                     {
@@ -96,6 +103,7 @@ namespace Capstone
                                 //FINISH TRANSACTION
                                 while (purchaseScreenInput == "3")
                                 {
+                                    decimal beforeBalance = currentUser.Balance;
                                     //Format balance to only have 2 decimal places
                                     decimal balance = VendingMachine.FormatBalance(currentUser);
 
@@ -128,6 +136,13 @@ namespace Capstone
                                     currentUser.Balance = balance;
 
                                     Console.WriteLine($"Here's your change: {numberOfQuarters} Quarter(s), {numberOfDimes} Dime(s), and {numberOfNickels} Nickel(s)");
+
+                                    string date = $"{DateTime.Now:yyyy-MM-dd}";
+                                    string time = $"{DateTime.Now:HH:mm:ss}";
+                                    string amOrPm = $"{DateTime.Now:tt}";
+                                    string logMessage = $"{date} {time} {amOrPm} GIVE CHANGE: ${beforeBalance.ToString("0.00")} ${balance.ToString("0.00")}";
+                                    log.WriteMessage(logMessage);
+
 
                                     break;
                                 }
