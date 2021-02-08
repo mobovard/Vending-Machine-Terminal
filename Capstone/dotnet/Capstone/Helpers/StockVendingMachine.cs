@@ -127,17 +127,17 @@ namespace Capstone
                     //and dispense the item 
                     else
                     {
+                        //count number of times the item is purchased
+                        food.TimesPurchased();
+
+                        //subtract price from user's balance and decrement food quantity
                         currentUser.Balance -= food.Price;
-                        food.Quantity--;
+                        food.Quantity--;                        
 
                         Console.Clear();
                         Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
-
-
                     }
-
                 }
-
             }
         }
 
