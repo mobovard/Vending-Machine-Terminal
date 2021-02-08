@@ -15,8 +15,9 @@ namespace Capstone
             Dictionary<string, Food> foodDictionary = VendingMachine.Stock(filePath);
 
             string userInput = "";
+            bool running = true;
 
-            while (userInput != "3")
+            while (running)
             {                
 
                 //instantiate a user that has a Balance property
@@ -143,8 +144,7 @@ namespace Capstone
                     //Exit
                     case "3":
                         {
-                            Environment.Exit(0);
-
+                            running = false;
                             break;
                         }
                     
@@ -183,7 +183,6 @@ namespace Capstone
                                 {
                                     Console.WriteLine(e.Message);
                                 }
-
 
                             }
 
