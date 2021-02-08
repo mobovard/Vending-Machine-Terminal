@@ -10,20 +10,21 @@ namespace Capstone
         static void Main(string[] args)
         {
             //use filePath to create a dictionary<slot, Food>
-            string filePath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\module1-capstone-c-team-4\Example Files\Inventory.txt";
+            string filePath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\Example Files\Inventory.txt";
 
             Dictionary<string, Food> foodDictionary = VendingMachine.Stock(filePath);
 
             string userInput = "";
 
+            // FIRST CHANGE User needs to be defined outside of the loop so we don't overwrite current user
+            //instantiate a user that has a Balance property
+            User currentUser = new User();
+
             while (userInput != "3")
             {                
 
-                //instantiate a user that has a Balance property
-                User currentUser = new User();
-
                 //use logpath to create a new log class
-                string logPath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\Example Files\Log2.txt";
+                string logPath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\Capstone\dotnet\Log.txt";
 
                 //construct log class
                 Log log = new Log(logPath);
@@ -60,8 +61,8 @@ namespace Capstone
                     //Purchase
                     case "2":
                         {
-
-                           
+                            //SECOND CHANGE Need this while loop to stay in the purchase menu
+                            while (userInput == "2")
                             {
                                 //PURCHASE SCREEN
                                 Console.WriteLine("(1) Feed Money");
