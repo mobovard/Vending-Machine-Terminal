@@ -18,13 +18,13 @@ namespace Capstone
             bool running = true;
 
             while (running)
-            {                
-
+            {
                 //instantiate a user that has a Balance property
                 User currentUser = new User();
 
+
                 //use logpath to create a new log class
-                string logPath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\Example Files\Log2.txt";
+                string logPath = @"C:\Users\Student\workspace\module1-capstone-c-team-4\module1-capstone-c-team-4\Capstone\dotnet\Capstone\Logs\Log.txt";
 
                 //construct log class
                 Log log = new Log(logPath);
@@ -62,8 +62,10 @@ namespace Capstone
                     case "2":
                         {
 
-                           
+                            while (userInput == "2")
                             {
+
+
                                 //PURCHASE SCREEN
                                 Console.WriteLine("(1) Feed Money");
                                 Console.WriteLine("(2) Select Product");
@@ -91,7 +93,7 @@ namespace Capstone
 
                                     //check that the user selection is in the vending machine
                                     if (foodDictionary.ContainsKey(userSelection))
-                                    {                          
+                                    {
                                         //make sure the user is able to purchase an item
                                         VendingMachine.ValidateUserInput(foodDictionary, currentUser, userSelection, log);
                                     }
@@ -155,6 +157,7 @@ namespace Capstone
 
                                     break;
                                 }
+
                             }
                             break;
                         }
@@ -165,12 +168,12 @@ namespace Capstone
                             running = false;
                             break;
                         }
-                    
+
                     //Hidden option, Sales Report
                     case "4":
                         {
                             //Define totalSales and format to only have 2 places after the decimal
-                            decimal totalSales = 0;                            
+                            decimal totalSales = 0;
                             string totalSalesString = totalSales.ToString("0.00");
                             totalSales = Convert.ToDecimal(totalSalesString);
 
@@ -180,11 +183,11 @@ namespace Capstone
 
                             //get directory and create the full path
                             string directory = $@"C:\Users\Student\workspace\module1-capstone-c-team-4\module1-capstone-c-team-4\Capstone\dotnet\Capstone\SalesReports";
-                            string fullFilePath = Path.Combine(directory, @$"{date}_{time}.txt");                            
+                            string fullFilePath = Path.Combine(directory, @$"{date}_{time}.txt");
 
                             //Loop through each item foodDictionary to create a sales report with the item name and # of times it was purchased
                             foreach (KeyValuePair<string, Food> item in foodDictionary)
-                            {                                
+                            {
                                 Food food = item.Value;
                                 totalSales += (food.Price * food.NumberOfTimesPurchased);
 
