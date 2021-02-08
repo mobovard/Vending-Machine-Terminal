@@ -127,23 +127,29 @@ namespace Capstone
                     //and dispense the item 
                     else
                     {
+                        //before balance for the log message to store the beginning balance
                         decimal beforeBalance = currentUser.Balance;
+
+                        //count number of times the item is purchased
+                        food.TimesPurchased();
+
+                        //subtract price from user's balance and decrement food quantity
                         currentUser.Balance -= food.Price;
-                        food.Quantity--;
+                        food.Quantity--;                        
 
                         Console.Clear();
                         Console.WriteLine($"{food.DispenseMessage()} Enjoy your snack, you have ${currentUser.Balance} remaining.\n");
 
+                        // to write log message with date time and before and after balance
                         string date = $"{DateTime.Now:yyyy-MM-dd}";
                         string time = $"{DateTime.Now:HH:mm:ss}";
                         string amOrPm = $"{DateTime.Now:tt}";
                         string logMessage = $"{date} {time} {amOrPm} {food.Name.ToUpper()} {userSelection} ${beforeBalance.ToString("0.00")} ${currentUser.Balance.ToString("0.00")}";
                         log.WriteMessage(logMessage);
 
+
                     }
-
                 }
-
             }
         }
 

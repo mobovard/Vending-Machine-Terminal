@@ -14,9 +14,12 @@ namespace Capstone.Classes
 
         public override string DispenseMessage()
         {
-            //TODO add in functionality to display money remaining
             return $"Glug Glug, Yum! {this.Name}, {this.Price}.";
         }
 
+        public override void TimesPurchased()
+        {
+            this.NumberOfTimesPurchased++;
+        }
     }
 }
